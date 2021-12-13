@@ -1,3 +1,5 @@
+***********************CHANGELOG*************************
+*BUG1     REV=01,DATE=13/12/2021 CHANGED CLC TO CLI  @001
 ******************* ASSEMBLER CODE **********************               00010001
 *                                                                       00020001
           YREGS                                                         00030001
@@ -27,7 +29,8 @@ FINDDISP  DS     0H                                                     00240001
           L      R5,=A(80)             R5 CONTAINS STRING LENGTH        00280001
 *                                                                       00290001
 CHECK     DS     0H                                                     00300001
-          CLC    0(1,R3),=X'40'        IS IT SPACE?                     00310001
+*@001     CLC    0(1,R3),=X'40'        IS IT SPACE?                     00310001
+          CLI    0(R3),X'40'           IS IT SPACE?                @001 00310001
           BNE    NOTSPACE              NO                               00320001
 *                                                                       00330001
 SPACE     DS     0H                                                             
