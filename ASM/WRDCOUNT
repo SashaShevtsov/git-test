@@ -1,0 +1,84 @@
+******************* ASSEMBLER CODE **********************               00010001
+*                                                                       00020001
+          YREGS                                                         00030001
+WRDCOUNT  CSECT                                                         00040001
+          STM    R14,R12,12(R13)                                        00050001
+          BALR   R11,R0                                                 00060001
+          USING  *,R11                                                  00070001
+*                                                                       00080001
+***************** RECEIVING CONTROL *********************               00090001
+*                                                                       00100001
+          LR     R12,R13                                                        
+          LA     R13,SAVE                                                       
+          ST     R12,4(,R13)                                            00130001
+          ST     R13,8(,R12)                                            00140001
+          SR     R15,R15                                                00150001
+          ST     R15,16(,R12)                                           00160001
+*                                                                       00170001
+********************** CODE *****************************               00190001
+*                                                                       00200001
+          OPEN   (INDCB,(INPUT))                                        00210001
+          L      R8,=A(0)              R8 CONTAINS WORD COUNTER         00220001
+          MVI    IS_WORD,C'N'          INIT FLAG                        00230001
+FINDDISP  DS     0H                                                     00240001
+          GET    INDCB,INAREA          GET NEW STRING                   00250001
+*                                                                       00260001
+          LA     R3,INAREA             R3 CONTAINS ADR OF CUR SYMB      00270001
+          L      R5,=A(80)             R5 CONTAINS STRING LENGTH        00280001
+*                                                                       00290001
+CHECK     DS     0H                                                     00300001
+          CLC    0(1,R3),=X'40'        IS IT SPACE?                     00310001
+          BNE    NOTSPACE              NO                               00320001
+*                                                                       00330001
+SPACE     DS     0H                                                             
+          CLI    IS_WORD,C'Y'          CHECK FLAG                               
+          BNE    GONEXT                                                         
+          MVI    IS_WORD,C'N'          SET FLAG BACK                            
+          A      R8,=A(1)              INCREMENT COUNTER                        
+          B      GONEXT                AGAIN                                    
+*                                                                               
+NOTSPACE  DS     0H                                                             
+          CLI    IS_WORD,C'Y'          CHECK FLAG                               
+          BE     GONEXT                                                         
+          MVI    IS_WORD,C'Y'          SET FLAG                                 
+*                                                                               
+GONEXT    DS     0H                                                             
+          LA     R3,1(R3)              GET NEXT SYMB OF STR                     
+          BCT    R5,CHECK                                                       
+*                                      STRING ENDED                             
+ENDSTR    DS     0H                                                             
+          B      FINDDISP              GO TO NEXT STRING                        
+*                                                                               
+FINISH    CLOSE  (INDCB)                                                        
+          CLI    IS_WORD,C'Y'          CHECK FLAG                               
+          BNE    ENDFIND                                                        
+          MVI    IS_WORD,C'N'          SET FLAG BACK                            
+          A      R8,=A(1)              INCREMENT COUNTER                        
+*                                                                               
+ENDFIND   DS     0H                                                             
+          CVDG   R8,POUT               CONVERT THE NUMBER                       
+          UNPK   OUTC,POUT                                                      
+          OI     OUTC+L'OUTC-1,X'F0'                                            
+          WTO    MF=(E,MSG)            PRRINT THE NUMBER                        
+*                                                                               
+***************** RETURNING CONTROL ********************                        
+*                                                                               
+          L      R13,4(,R13)                                                    
+          LM     R14,R12,12(R13)                                                
+          BR     R14                                                            
+*                                                                               
+*********************************************************                       
+*                                                                               
+          LTORG                                                                 
+INDCB     DCB    DSORG=PS,MACRF=(GM),DDNAME=SYSIN,EODAD=FINISH,        X        
+               RECFM=FB,LRECL=80,BLKSIZE=0                                      
+*                                                                               
+INAREA    DS     CL80                                                           
+MSG       DC     AL2(POUT-*,0)                                                  
+TEXTMSG   DC     CL18'NUMBER OF WORDS = '                                       
+OUTC      DS     CL16                                                           
+POUT      DS     PL16                                                           
+SAVE      DS     18F                                                            
+IS_WORD   DS     C                                                              
+**********************************************************                      
+          END                                                                   
