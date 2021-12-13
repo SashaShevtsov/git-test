@@ -62,7 +62,8 @@ ENDFIND   DS     0H
           CVDG   R8,POUT               CONVERT THE NUMBER                       
           UNPK   OUTC,POUT                                                      
           OI     OUTC+L'OUTC-1,X'F0'                                            
-          WTO    MF=(E,MSG)            PRRINT THE NUMBER                        
+          WTO    MF=(E,MSG)            PRRINT THE NUMBER       
+          WTO    'Test1 (Yuliya)'                 
 *                                                                               
 ***************** RETURNING CONTROL ********************                        
 *                                                                               
