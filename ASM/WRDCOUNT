@@ -1,5 +1,6 @@
 ***********************CHANGELOG*************************
 *BUG1     REV=01,DATE=13/12/2021 CHANGED CLC TO CLI  @001
+*BUG2     REV=02,DATE=15/12/2021 DELETED ADR USAGE   @002
 ******************* ASSEMBLER CODE **********************               00010001
 *                                                                       00020001
           YREGS                                                         00030001
@@ -20,7 +21,8 @@ WRDCOUNT  CSECT                                                         00040001
 ********************** CODE *****************************               00190001
 *                                                                       00200001
           OPEN   (INDCB,(INPUT))                                        00210001
-          L      R8,=A(0)              R8 CONTAINS WORD COUNTER         00220001
+*@002     L      R8,=A(0)              R8 CONTAINS WORD COUNTER         00220001
+          LA     R8,0                  R8 CONTAINS WORD COUNTER @002    00220001
           MVI    IS_WORD,C'N'          INIT FLAG                        00230001
 FINDDISP  DS     0H                                                     00240001
           GET    INDCB,INAREA          GET NEW STRING                   00250001
