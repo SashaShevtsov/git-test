@@ -1,7 +1,7 @@
 ***********************CHANGELOG*************************
 *BUG1     REV=01,DATE=13/12/2021 CHANGED CLC TO CLI  @001
 *BUG2     REV=02,DATE=15/12/2021 DELETED ADR USAGE   @002
-*BUG3     REv=03
+*BUG3     REv=03,DATE=17/12/2021 ADD WTO             @003
 ******************* ASSEMBLER CODE **********************               00010001
 *                                                                       00020001
           YREGS                                                         00030001
@@ -66,7 +66,7 @@ ENDFIND   DS     0H
           UNPK   OUTC,POUT                                                      
           OI     OUTC+L'OUTC-1,X'F0'                                            
           WTO    MF=(E,MSG)            PRRINT THE NUMBER  
-          WTO    'Yuliya test'                     
+          WTO    'Yuliya test'         ADD WTO                     @003
 *                                                                               
 ***************** RETURNING CONTROL ********************                        
 *                                                                               
