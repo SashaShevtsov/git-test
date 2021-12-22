@@ -1,0 +1,122 @@
+)CCSID NUMBER(00273)
+)ATTR
+/**********************************************************************/
+/* (c) Copyright Beta Systems DCI Software AG, Berlin, 2018, 2019     */
+/*                                                                    */
+/*    PANEL: PE32ACT0                                                 */
+/*  VERSION: V7R1M0                                                   */
+/*      PTF: NONE                                                     */
+/*     DATE: 02/25/2019                                               */
+/*                          Made in Germany                           */
+/**********************************************************************/
+<  TYPE(TEXT   ) COLOR(&BSSPHC)  /* Panel header text
+                 HILITE(&BSSPHE) /*
+                 INTENS(&BSSPHI) /*
+!  TYPE(TEXT   ) COLOR(&BSSPTC)  /* Panel title text
+                 HILITE(&BSSPTE) /* OUTPUT for variable headers
+                 INTENS(&BSSPTI) /*
+§  TYPE(TEXT   ) COLOR(&BSSSHC)  /* Section header text §
+                 HILITE(&BSSSHE) /*
+                 INTENS(&BSSSHI) /*
+"  TYPE(OUTPUT ) COLOR(&BSSPHC)  /* Panel header output
+                 HILITE(&BSSPHE) /* (row/column etc.)
+                 INTENS(&BSSPHI) /*
+                 JUST(RIGHT)     /*
+\  TYPE(OUTPUT ) COLOR(&BSSDOC)  /* Important output fields
+                 HILITE(&BSSDOE) /*
+                 INTENS(&BSSDOI) /*
+%  TYPE(OUTPUT ) COLOR(&BSSNOC)  /* Normal output fields
+                 HILITE(&BSSNOE) /*
+                 INTENS(&BSSNOI) /*
+_  TYPE(TEXT   ) COLOR(&BSSDOC)  /* Important help & field explanations
+                 HILITE(&BSSDOE) /* DATAOUT for dynamic area
+                 INTENS(&BSSDOI) /*
+$  TYPE(TEXT   ) COLOR(&BSSAOC)  /* Normal help & field explanations
+                 HILITE(&BSSAOE) /* DATAOUT for dynamic areas
+                 INTENS(&BSSAOI) /*
+~  TYPE(TEXT   ) COLOR(&BSSFOC)  /* Field explanations ~ 
+                 HILITE(&BSSFOE) /*
+                 INTENS(&BSSFOI) /*
+#  TYPE(TEXT   ) COLOR(&BSSIOC)  /* Input/Output delimiter
+                 HILITE(&BSSIOE) /*
+                 INTENS(&BSSIOI) /*
+?  TYPE(INPUT  ) COLOR(&BSSOIC)  /* Optional input fields
+                 HILITE(&BSSOIE) /*
+                 INTENS(&BSSOII) /*
+                 PAD(&BSSOIP)    /*
+                 CAPS(ON)        /*
+*  TYPE(INPUT  ) COLOR(&BSSRIC)  /* Required input fields
+                 HILITE(&BSSRIE) /*
+                 INTENS(&BSSRII) /*
+                 PAD(&BSSRIP)    /*
+                 CAPS(ON)        /*
++  TYPE(TEXT   )                 /* Reset character
+)BODY EXPAND(``)
+<&B32HEAD `-`+
+<Option#===>?ZCMD ` `                                                          +
++
++!System Activities Selection Menu                        ~System   ~-%BQLSYS  +
++                                                         ~Location ~-%BQLLOC
++                                                         ~Subsys-ID~-%BQLSSID +
++                                                         ~User ID  ~-%ZUSER   +
++
++  _1+$TRANSFER     -  Transfer Requests
++
++  _2+$TABLE        -  Transfer Table
++
++  _3+$GROUP        -  Transfer Group Information
++
++  _4+$DEVICE       -  Transfer Device Information &XXXTXT
++
++
++  _5+$READER       -  Reader Information
++
++
++
++
++$Select one of the above options. Press_END$to return to the previous menu.
+)INIT
+  .HELP   = 'T&BQLLANG.32ACT0'
+  .CURSOR = 'ZCMD'
+
+/*&XXXTXT = '(under construction!!!)'
+
+  VGET (ACTAGREF) SHARED
+  IF (&ACTAGREF EQ 'YES')
+    &B32REF   = YES
+    VPUT (B32REF  ) SHARED
+    &ACTAGREF = NO
+    VPUT (ACTAGREF) SHARED
+    &ZCMD     = 3
+    .RESP     = ENTER
+
+  VGET (ACTADREF) SHARED
+  IF (&ACTADREF EQ 'YES')
+    &B32REF   = YES
+    VPUT (B32REF  ) SHARED
+    &ACTADREF = NO
+    VPUT (ACTADREF) SHARED
+    &ZCMD     = 4
+    .RESP     = ENTER
+
+  VGET (ACTARREF) SHARED
+  IF (&ACTARREF EQ 'YES')
+    &B32REF   = YES
+    VPUT (B32REF  ) SHARED
+    &ACTARREF = NO
+    VPUT (ACTARREF) SHARED
+    &ZCMD     = 5
+    .RESP     = ENTER
+)PROC
+  &ZSEL = TRANS(TRUNC(&ZCMD,'.')
+           1,'PGM(BST00DLG) PARM(C,P&BQLLANG.32TQ00) NOCHECK'
+           2,'PGM(BST00DLG) PARM(X,P&BQLLANG.32AT00) NOCHECK'
+           3,'PGM(BST00DLG) PARM(X,P&BQLLANG.32AG00) NOCHECK'
+           4,'PGM(BST00DLG) PARM(X,P&BQLLANG.32AD00) NOCHECK'
+        /* 4,'PGM(BST00DLG) PARM(C,P&BQLLANG.32DMY1) NOCHECK'
+           5,'PGM(BST00DLG) PARM(X,P&BQLLANG.32AR00) NOCHECK'
+           L,'PGM(BST00DLG) PARM(X,P&BQLLANG.32LG00) NOCHECK'
+         ' ',' '
+           *,'?' )
+  &ZTRAIL = .TRAIL
+)END
