@@ -41,7 +41,8 @@ SPACE     DS     0H
           BNE    GONEXT                                                         
           MVI    IS_WORD,C'N'          SET FLAG BACK                            
           A      R8,=A(1)              INCREMENT COUNTER                        
-          B      GONEXT                AGAIN                                    
+          B      GONEXT                AGAIN   
+*                                           
 *                                                                               
 NOTSPACE  DS     0H                                                             
           CLI    IS_WORD,C'Y'          CHECK FLAG                               
